@@ -8,7 +8,7 @@ class Calculation(ABC):
 
     @abstractmethod
     def calculate(self):
-        pass
+       ... 
 
 
 class Add(Calculation):

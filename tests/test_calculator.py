@@ -1,3 +1,4 @@
+import pytest
 from calculator import Add, Subtract, History
 
 
@@ -44,3 +45,8 @@ def test_history_clear():
     history.clear()
 
     assert history.get_all() == []
+def test_abstract_calculation():
+    from calculator import Calculation
+
+    with pytest.raises(TypeError):
+        Calculation(10, 5)

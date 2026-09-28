@@ -1,4 +1,15 @@
+import math
+
 from calculator import Add, Subtract, History
+
+
+def get_number(prompt):
+    value = float(input(prompt))
+
+    if not math.isfinite(value):
+        raise ValueError
+
+    return value
 
 
 def main():
@@ -8,7 +19,11 @@ def main():
     print("Type 'help' to see available commands.")
 
     while True:
-        command = input("> ").strip().lower()
+        try:
+            command = input("> ").strip().lower()
+        except (KeyboardInterrupt, EOFError):
+            print("\nGoodbye!")
+            break
 
         if command == "exit":
             print("Goodbye!")
@@ -52,28 +67,44 @@ def main():
                         f"{calculation.a:g}, {calculation.b:g} = {result:g}"
                     )
 
-                number = int(input("Enter calculation number to remove: "))
-                history.remove(number - 1)
+                try:
+                    number = int(input("Enter calculation number to remove: "))
 
-                print("Calculation removed.")
+                    if number < 1 or number > len(calculations):
+                        print("Invalid calculation number.")
+                    else:
+                        history.remove(number - 1)
+                        print("Calculation removed.")
+
+                except ValueError:
+                    print("Invalid calculation number.")
 
         elif command == "add":
-            first = float(input("First number: "))
-            second = float(input("Second number: "))
+            try:
+                first = get_number("First number: ")
+                second = get_number("Second number: ")
 
-            calculation = Add(first, second)
-            history.add(calculation)
+                calculation = Add(first, second)
+                history.add(calculation)
 
-            print(f"Result: {calculation.calculate()}")
+                print(f"Result: {calculation.calculate()}")
+
+            except ValueError:
+                print("Invalid number. Please enter numeric values.")
 
         elif command == "subtract":
-            first = float(input("First number: "))
-            second = float(input("Second number: "))
+            try:
+                first = get_number("First number: ")
+                second = get_number("Second number: ")
 
-            calculation = Subtract(first, second)
-            history.add(calculation)
+                calculation = Subtract(first, second)
+                history.add(calculation)
 
-            print(f"Result: {calculation.calculate()}")
+                print(f"Result: {calculation.calculate()}")
+
+            except ValueError:
+                print("Invalid number. Please enter numeric values.")
+
         else:
             print("Unknown command. Type 'help' to see available commands.")
 
