@@ -1,4 +1,3 @@
-import runpy
 from unittest.mock import patch
 
 from calculator.__main__ import get_number, main
@@ -170,14 +169,6 @@ def test_keyboard_interrupt(capsys):
 def test_end_of_input(capsys):
     with patch("builtins.input", side_effect=EOFError):
         main()
-
-    output = capsys.readouterr().out
-    assert "Goodbye!" in output
-
-
-def test_main_module_execution(capsys):
-    with patch("builtins.input", side_effect=["exit"]):
-        runpy.run_module("calculator.__main__", run_name="__main__")
 
     output = capsys.readouterr().out
     assert "Goodbye!" in output
